@@ -27,16 +27,16 @@ runner.getResults().each{ testSuiteRunner ->
 
 		testSuiteRunner.getResults().each{ testCaseRunner ->
 		
-			def TCstatus =  testCaseRunner.getStatus()
+			def TCstatus =  testCaseRunner.getStatus().toString()
 			def TCname =  testCaseRunner.getTestCase().getName()
 	
-		if (TSstatus == 'FINISHED'){
-			log.info('######Test Suite -> ' + suiteName + ' ###### Status = PASSED  ___ time : '+ timeTaken + ' TC Status: ' + TCstatus + ', TC NAME: ' + TCname)
-			suite_a = countTS + ', PASSED, ' + suiteName + ', ' + timeTaken + ', ' + projName  + ', ' + TCname +  ', ' + TCstatus + '\n'
+		if (TCstatus == 'FINISHED'){
+			log.info('######Test Suite -> ' + suiteName + ' ###### Status = PASSED  ___ time : '+ timeTaken + ' TC Status: ' + 'PASSED' + ', TC NAME: ' + TCname)
+			suite_a = countTS + ', PASSED, ' + suiteName + ', ' + timeTaken + ', ' + projName  + ', ' + TCname +  ', ' + 'PASSED' + '\n'
 			pw.write(suite_a)
 			}
 		else{
-			log.info('######Test Suite -> ' + suiteName + ' ###### Status = ' + TSstatus)
+			log.info('######Test Suite -> ' + suiteName + ' ###### Status = xxxxxxxxxx' + TSstatus +' xxxxxxxxxxxxxxx' + TCname)
 			suite_a = countTS + ', '+ TSstatus + ', ' + suiteName + ', ' +  timeTaken + ', ' + projName  + ', ' + TCname +  ', ' + TCstatus + '\n'
 			pw.write(suite_a)
 			}
