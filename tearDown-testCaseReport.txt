@@ -1,0 +1,52 @@
+// Replace the path with the one you need.
+//gets the path of the project root
+def projectPath = new com.eviware.soapui.support.GroovyUtils(context).projectPath
+projectPath = projectPath.toString().replace('\\', '/')
+log.info projectPath
+
+def suite_a = "";
+def projName = runner.getProject().getName()
+def countTS = 1
+projName = ('/') + projName.toString()
+
+// Creating output file
+fos = new FileOutputStream( projectPath + projName + '.csv', false )
+
+
+// Filling output file
+pw = new PrintWriter( fos )
+suite_a =  ' TestCaseId, Status = PASSED/FAILED, TEST SUITE NAME , TIME TAKEN, acPACK SERVICE , TEST CASE, TC STATUS ' + '\n'
+pw.write(suite_a)
+
+//iterate all testSuites
+runner.getResults().each{ testSuiteRunner ->
+
+	def TSstatus = testSuiteRunner.getStatus().toString()	
+	def suiteName =  testSuiteRunner.getTestSuite().getName()
+	def timeTaken = testSuiteRunner.getTimeTaken()
+
+		testSuiteRunner.getResults().each{ testCaseRunner ->
+		
+			def TCstatus =  testCaseRunner.getStatus()
+			def TCname =  testCaseRunner.getTestCase().getName()
+	
+		if (TSstatus == 'FINISHED'){
+			log.info('######Test Suite -> ' + suiteName + ' ###### Status = PASSED  ___ time : '+ timeTaken + ' TC Status: ' + TCstatus + ', TC NAME: ' + TCname)
+			suite_a = countTS + ', PASSED, ' + suiteName + ', ' + timeTaken + ', ' + projName  + ', ' + TCname +  ', ' + TCstatus + '\n'
+			pw.write(suite_a)
+			}
+		else{
+			log.info('######Test Suite -> ' + suiteName + ' ###### Status = ' + TSstatus)
+			suite_a = countTS + ', '+ TSstatus + ', ' + suiteName + ', ' +  timeTaken + ', ' + projName  + ', ' + TCname +  ', ' + TCstatus + '\n'
+			pw.write(suite_a)
+			}
+
+		countTS = countTS+1
+		
+		
+	}
+}	
+
+// Closing the output.
+pw.close()
+fos.close()
